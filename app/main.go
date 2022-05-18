@@ -12,6 +12,7 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/", handlers.Index)
+	r.GET("/:id", handlers.Redirect)
 
 	port := os.Getenv("PORT")
 	log.Fatal(r.Run(":" + port))
