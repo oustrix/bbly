@@ -11,7 +11,7 @@ import (
 func main() {
 	r := gin.Default()
 
-	r.GET("/", handlers.IndexHandler)
+	r.GET("/", handlers.Index)
 
 	port := os.Getenv("PORT")
 	log.Fatal(r.Run(":" + port))
