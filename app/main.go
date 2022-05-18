@@ -3,14 +3,16 @@ package main
 import (
 	"bbly/internal/handlers"
 	"log"
-	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	r := gin.Default()
+
+	r.GET("/", handlers.IndexHandler)
+
 	port := os.Getenv("PORT")
-
-	http.HandleFunc("/", handlers.IndexHandler)
-
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(r.Run(":" + port))
 }
