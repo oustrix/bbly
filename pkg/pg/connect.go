@@ -43,7 +43,8 @@ func getDBConnectionConfig() (*pgxpool.Config, error) {
 }
 
 func createDbPool(poolConfig *pgxpool.Config) error {
-	DB, err := pgxpool.ConnectConfig(context.Background(), poolConfig)
+	var err error
+	DB, err = pgxpool.ConnectConfig(context.Background(), poolConfig)
 	if err != nil {
 		return errors.New("failed to connect to DB")
 	}
