@@ -7,13 +7,16 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func DbConnect() (*pgxpool.Pool, error) {
+func GetDBConnectionString() (string, error) {
 	cfg, err := ini.Load("../../config/config.ini")
 	if err != nil {
 		return nil, errors.New("failed to read config file")
 	}
-
 	connStr := cfg.Section("").Key("DB_CON").String()
+	return connStr, nil
+}
+
+func DbConnect(connStr string) (*pgxpool.Pool, error) {
 	conn, err := pgxpool.Connect(context.Background(), connStr)
 	if err != nil {
 		return nil, errors.New("failed to connect to DB")
