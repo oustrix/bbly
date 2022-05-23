@@ -3,11 +3,12 @@ package pg
 import (
 	"context"
 	"errors"
+
 	"github.com/jackc/pgx/v4/pgxpool"
 	"gopkg.in/ini.v1"
 )
 
-func GetDBConnectionString() (*pgxpool.Config, error) {
+func GetDBConnectionConfig() (*pgxpool.Config, error) {
 	cfg, err := ini.Load("../../config/config.ini")
 	if err != nil {
 		return nil, errors.New("failed to read config file")
