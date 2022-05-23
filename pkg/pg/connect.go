@@ -7,17 +7,22 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func GetDBConnectionString() (string, error) {
+func GetDBConnectionString() (*pgxpool.Config, error) {
 	cfg, err := ini.Load("../../config/config.ini")
 	if err != nil {
 		return nil, errors.New("failed to read config file")
 	}
 	connStr := cfg.Section("").Key("DB_CON").String()
-	return connStr, nil
+
+	poolConfig, err := pgxpool.ParseConfig(connStr)
+	if err != nil {
+		return nil, errors.New("failed to parse connection string to pgxpool.Config")
+	}
+	return poolConfig, nil
 }
 
-func DbConnect(connStr string) (*pgxpool.Pool, error) {
-	conn, err := pgxpool.Connect(context.Background(), connStr)
+func DbConnect(poolConfig *pgxpool.Config) (*pgxpool.Pool, error) {
+	conn, err := pgxpool.ConnectConfig(context.Background(), poolConfig)
 	if err != nil {
 		return nil, errors.New("failed to connect to DB")
 	}
