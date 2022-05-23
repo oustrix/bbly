@@ -8,6 +8,8 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+// TODO: add tests
+
 func GetDBConnectionConfig() (*pgxpool.Config, error) {
 	cfg, err := ini.Load("../../config/config.ini")
 	if err != nil {
@@ -22,7 +24,7 @@ func GetDBConnectionConfig() (*pgxpool.Config, error) {
 	return poolConfig, nil
 }
 
-func DbConnect(poolConfig *pgxpool.Config) (*pgxpool.Pool, error) {
+func DbPool(poolConfig *pgxpool.Config) (*pgxpool.Pool, error) {
 	conn, err := pgxpool.ConnectConfig(context.Background(), poolConfig)
 	if err != nil {
 		return nil, errors.New("failed to connect to DB")
