@@ -10,7 +10,25 @@ import (
 
 // TODO: add tests
 
-func GetDBConnectionConfig() (*pgxpool.Config, error) {
+var DB *pgxpool.Pool
+
+func ConnectToDB() error {
+	cfg, err := getDBConnectionConfig()
+	if err != nil {
+		return err
+	}
+
+	cfg.MaxConns = 10
+
+	err = createDbPool(cfg)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getDBConnectionConfig() (*pgxpool.Config, error) {
 	cfg, err := ini.Load("../../config/config.ini")
 	if err != nil {
 		return nil, errors.New("failed to read config file")
@@ -24,11 +42,18 @@ func GetDBConnectionConfig() (*pgxpool.Config, error) {
 	return poolConfig, nil
 }
 
-func DbPool(poolConfig *pgxpool.Config) (*pgxpool.Pool, error) {
-	conn, err := pgxpool.ConnectConfig(context.Background(), poolConfig)
+func createDbPool(poolConfig *pgxpool.Config) error {
+	DB, err := pgxpool.ConnectConfig(context.Background(), poolConfig)
 	if err != nil {
-		return nil, errors.New("failed to connect to DB")
+		return errors.New("failed to connect to DB")
 	}
+	err = checkDBConnection()
+	if err != nil {
+		return errors.New("failed to ping server")
+	}
+	return nil
+}
 
-	return conn, nil
+func checkDBConnection() error {
+	return DB.Ping(context.Background())
 }
