@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	err := pg.ConnectToDB("../../config/config.ini")
+	err := pg.ConnectToDB()
 	if err != nil {
 		log.Fatal(err)
 	}

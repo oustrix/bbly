@@ -3,15 +3,15 @@ package pg
 import (
 	"context"
 	"errors"
+	"os"
 
 	"github.com/jackc/pgx/v4/pgxpool"
-	"gopkg.in/ini.v1"
 )
 
 var DB *pgxpool.Pool
 
-func ConnectToDB(cfgPath string) error {
-	cfg, err := getDBConnectionConfig(cfgPath)
+func ConnectToDB() error {
+	cfg, err := getDBConnectionConfig()
 	if err != nil {
 		return err
 	}
@@ -26,12 +26,8 @@ func ConnectToDB(cfgPath string) error {
 	return nil
 }
 
-func getDBConnectionConfig(cfgPath string) (*pgxpool.Config, error) {
-	cfg, err := ini.Load(cfgPath)
-	if err != nil {
-		return nil, errors.New("failed to read config file")
-	}
-	connStr := cfg.Section("").Key("DB_CON").String()
+func getDBConnectionConfig() (*pgxpool.Config, error) {
+	connStr := os.Getenv("CONN_STR")
 
 	poolConfig, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
