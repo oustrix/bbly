@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -19,6 +20,7 @@ func Save(c *gin.Context) {
 	_, err := pg.DB.Exec(context.Background(), "INSERT INTO links (id, url, visits) VALUES ($1, $2, $3)", shortURL, url, 0)
 	if err != nil {
 		c.HTML(http.StatusInternalServerError, "server_error.html", gin.H{})
+		log.Fatal(err)
 	}
 
 }
