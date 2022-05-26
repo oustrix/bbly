@@ -12,8 +12,8 @@ import (
 
 var DB *pgxpool.Pool
 
-func ConnectToDB() error {
-	cfg, err := getDBConnectionConfig()
+func ConnectToDB(cfgPath string) error {
+	cfg, err := getDBConnectionConfig(cfgPath)
 	if err != nil {
 		return err
 	}
@@ -28,8 +28,8 @@ func ConnectToDB() error {
 	return nil
 }
 
-func getDBConnectionConfig() (*pgxpool.Config, error) {
-	cfg, err := ini.Load("../../config/config.ini")
+func getDBConnectionConfig(cfgPath string) (*pgxpool.Config, error) {
+	cfg, err := ini.Load(cfgPath)
 	if err != nil {
 		return nil, errors.New("failed to read config file")
 	}
