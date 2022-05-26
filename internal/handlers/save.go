@@ -11,11 +11,16 @@ import (
 	"bbly/pkg/pg"
 )
 
-func Save(c *gin.Context) {
+func Save(c *gin.Context) error {
 	url := c.PostForm("url")
 	rand.Seed(time.Now().UnixNano())
 	shortURL := randomUrl()
-	pg.DB.Exec(context.Background(), "INSERT INTO links (id, url, visits) VALUES ($1, $2, $3)", shortURL, url, 0)
+	_, err := pg.DB.Exec(context.Background(), "INSERT INTO links (id, url, visits) VALUES ($1, $2, $3)", shortURL, url, 0)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // generates random short URL
