@@ -23,6 +23,9 @@ func Save(c *gin.Context) {
 		log.Fatal(err)
 	}
 
+	ctx := gin.H{"ShortURL": shortURL}
+	c.HTML(http.StatusOK, "done.html", ctx)
+
 }
 
 // generates random short URL
