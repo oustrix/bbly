@@ -19,7 +19,7 @@ func main() {
 	r.LoadHTMLGlob("./web/templates/*")
 
 	r.GET("/", handlers.Index)
-	//r.PUT("/", handlers.Save)
+	r.PUT("/", handlers.Save)
 	r.GET("/:id", handlers.Redirect)
 
 	port := os.Getenv("PORT")
