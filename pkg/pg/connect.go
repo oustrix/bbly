@@ -8,8 +8,6 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-// TODO: add tests
-
 var DB *pgxpool.Pool
 
 func ConnectToDB(cfgPath string) error {
