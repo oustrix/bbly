@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"math/rand"
+	"net/http"
 	"time"
 
 	"github.com/dchest/uniuri"
@@ -11,16 +12,15 @@ import (
 	"bbly/pkg/pg"
 )
 
-func Save(c *gin.Context) error {
+func Save(c *gin.Context) {
 	url := c.PostForm("url")
 	rand.Seed(time.Now().UnixNano())
 	shortURL := randomUrl()
 	_, err := pg.DB.Exec(context.Background(), "INSERT INTO links (id, url, visits) VALUES ($1, $2, $3)", shortURL, url, 0)
 	if err != nil {
-		return err
+		c.HTML(http.StatusInternalServerError, "server_error.html", gin.H{})
 	}
 
-	return nil
 }
 
 // generates random short URL
