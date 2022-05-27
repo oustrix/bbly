@@ -1,1 +1,1 @@
-web: bin/bbly
+web: bin/bblink
