@@ -11,10 +11,8 @@ import (
 )
 
 func Redirect(c *gin.Context) {
-	id := c.Param("id")
-	row := pg.DB.QueryRow(context.Background(), "SELECT url FROM links WHERE id=$1 LIMIT 1;", id)
-	var url string
-	err := row.Scan(&url)
+	id := getID(c)
+	url, err := searchURL(id)
 	if err != nil {
 		log.Println("problems to select url with id" + id)
 		c.HTML(http.StatusInternalServerError, "server_error.html", gin.H{})
@@ -22,4 +20,15 @@ func Redirect(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, url)
 		c.Abort()
 	}
+}
+
+func getID(c *gin.Context) string {
+	return c.Param("id")
+}
+
+func searchURL(id string) (string, error) {
+	row := pg.DB.QueryRow(context.Background(), "SELECT url FROM links WHERE id=$1 LIMIT 1;", id)
+	var url string
+	err := row.Scan(&url)
+	return url, err
 }
