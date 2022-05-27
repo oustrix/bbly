@@ -1,1 +1,1 @@
-web: bin/bbly
+web: app/main.go
