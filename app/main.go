@@ -23,8 +23,5 @@ func main() {
 	r.GET("/:id", handlers.Redirect)
 
 	port := os.Getenv("PORT")
-	if port == "" {
-		port = "9000"
-	}
 	log.Fatal(r.Run(":" + port))
 }
