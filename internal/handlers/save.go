@@ -17,14 +17,17 @@ func Save(c *gin.Context) {
 	url := c.PostForm("url")
 	rand.Seed(time.Now().UnixNano())
 	shortURL := randomUrl()
+	log.Printf("Generate shorten URL: %s for %s", shortURL, url)
 	_, err := pg.DB.Exec(context.Background(), "INSERT INTO links (id, url, visits) VALUES ($1, $2, $3)", shortURL, url, 0)
 	if err != nil {
 		c.HTML(http.StatusInternalServerError, "server_error.html", gin.H{})
 		log.Fatal(err)
 	}
+	log.Printf("%s saved in DB", shortURL)
 
-	ctx := gin.H{"ShortURL": shortURL}
-	c.HTML(http.StatusOK, "done.html", ctx)
+	c.HTML(http.StatusOK, "done.html", gin.H{
+		"shortURL": shortURL,
+	})
 
 }
 
