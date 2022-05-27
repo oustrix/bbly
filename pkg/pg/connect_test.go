@@ -7,6 +7,6 @@ import (
 )
 
 func TestGetDBConnectionConfig(t *testing.T) {
-	_, err := getDBConnectionConfig("")
-	require.Error(t, err)
+	_, err := getDBConnectionConfig()
+	require.NoError(t, err)
 }
