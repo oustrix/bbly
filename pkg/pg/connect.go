@@ -3,6 +3,7 @@ package pg
 import (
 	"context"
 	"errors"
+	"log"
 	"os"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -15,6 +16,7 @@ func ConnectToDB() error {
 	if err != nil {
 		return err
 	}
+	log.Println("successfully received DB config")
 
 	cfg.MaxConns = 10
 
@@ -28,7 +30,6 @@ func ConnectToDB() error {
 
 func getDBConnectionConfig() (*pgxpool.Config, error) {
 	connStr := os.Getenv("CONN_STR")
-
 	poolConfig, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
 		return nil, errors.New("failed to parse connection string to pgxpool.Config")
@@ -42,10 +43,12 @@ func createDbPool(poolConfig *pgxpool.Config) error {
 	if err != nil {
 		return errors.New("failed to connect to DB")
 	}
+	log.Println("successfully connected to the database")
 	err = checkDBConnection()
 	if err != nil {
 		return errors.New("failed to ping server")
 	}
+	log.Println("successfully ping DB")
 	return nil
 }
 
