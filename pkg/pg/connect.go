@@ -29,7 +29,7 @@ func ConnectToDB() error {
 }
 
 func getDBConnectionConfig() (*pgxpool.Config, error) {
-	connStr := os.Getenv("CONN_STR")
+	connStr := os.Getenv("DATABASE_URL")
 	poolConfig, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
 		return nil, errors.New("failed to parse connection string to pgxpool.Config")
