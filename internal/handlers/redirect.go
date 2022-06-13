@@ -1,5 +1,8 @@
 package handlers
 
+// TODO: add tests for searchURLAndVisits
+// TODO: add tests for Redirect
+
 import (
 	"context"
 	"log"
