@@ -16,15 +16,8 @@ import (
 func Save(c *gin.Context) {
 	url := getURL(c)
 
-	// if for some full url shorten url already exist it's just response with already existing shorten url
-	isExist, shortURL := checkForExisting(url)
-	if isExist {
-		responseDone(c, shortURL)
-		return
-	}
-
 	// generate and saving shorten url
-	shortURL = randomUrl()
+	shortURL := randomUrl()
 	log.Printf("Generate shorten URL: %s for %s", shortURL, url)
 	_, err := pg.DB.Exec(context.Background(), "INSERT INTO links (id, url, visits) VALUES ($1, $2, $3)", shortURL, url, 0)
 	if err != nil {
@@ -39,16 +32,6 @@ func Save(c *gin.Context) {
 // get URL from PostForm
 func getURL(c *gin.Context) string {
 	return c.PostForm("url")
-}
-
-func checkForExisting(url string) (bool, string) {
-	var id string
-	row := pg.DB.QueryRow(context.Background(), "SELECT id FROM links WHERE url=$1", url)
-	err := row.Scan(&id)
-	if err != nil {
-		return false, ""
-	}
-	return true, id
 }
 
 // generates random short URL
