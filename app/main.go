@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -22,6 +21,5 @@ func main() {
 	r.POST("/", handlers.Save)
 	r.GET("/:id", handlers.Redirect)
 
-	port := os.Getenv("PORT")
-	log.Fatal(r.Run(":" + port))
+	log.Fatal(r.Run(":80"))
 }
