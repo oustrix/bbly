@@ -17,7 +17,7 @@ func Save(c *gin.Context) {
 	url := getURL(c)
 
 	// generate and saving shorten url
-	shortURL := randomUrl()
+	shortURL := shortURL()
 	log.Printf("Generate shorten URL: %s for %s", shortURL, url)
 	_, err := pg.DB.Exec(context.Background(), "INSERT INTO links (id, url, visits) VALUES ($1, $2, $3)", shortURL, url, 0)
 	if err != nil {
@@ -35,7 +35,7 @@ func getURL(c *gin.Context) string {
 }
 
 // generates random short URL
-func randomUrl() string {
+func shortURL() string {
 	var newURL string
 	isExist := true
 	rand.Seed(time.Now().UnixNano())
