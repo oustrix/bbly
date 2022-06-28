@@ -30,6 +30,9 @@ func ConnectToDB() error {
 
 func getDBConnectionConfig() (*pgxpool.Config, error) {
 	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		return nil, errors.New("DATABASE_URL environment variable isn't exist")
+	}
 	poolConfig, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
 		return nil, errors.New("failed to parse connection string to pgxpool.Config")
